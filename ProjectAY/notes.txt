@@ -1,0 +1,35 @@
+Users API Functionalities
+* Sign up - first name, last name, email, matric number, class(abi na year una dey call am? e.g ND 1), department/faculty 
+
+* Login - matric number or email, password
+
+* Profile/me - to return users profile data
+
+* My courses - to return the list of apis that  belongs to a user
+
+ * All courses - to return the list of all courses. Should support filters - >By class. e.g I should be able to get all courses for ND 1 only
+> By faculty e.g department of social science e.t.c
+> I should be able to pass in 2 or more filters at the same time e.g class=nd1&faculty=science. Something like this 
+
+* Join a course
+
+* Get course - to return all lessons created under a course
+
+* Mark lesson as taken - to inform the lecturer that 1 more person just finished this lesson. Should be a number that you just increment. This will be under lesson stats on the lecturer's end
+
+
+Lecturer API Functionalities
+
+* Sign up - first name, last name, email, staff id, department/faculty 
+
+* Login - staff id or email, password
+
+* Profile/me - to return lecturer's profile data
+
+* My courses - to see the list of courses created by a lecturer 
+
+* Create course - course name, description, class that will take the course e.g ND 1
+
+* Create lesson - title/topic, content/lesson body, footnote.
+
+* Get lesson - return lesson data including total number of students that took/read the lesson
