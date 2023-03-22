@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
     
     
 
-class PrimaryUser(AbstractUser):
+class Primary(AbstractUser):
     DEPARTMENTS = (
         ("COMPUTER SCIENCE", "COMPUTER SCIENCE"),
         ("HOSPITALITY MANAGEMENT", "HOSPITALITY MANAGEMENT"),
