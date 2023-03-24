@@ -1,13 +1,13 @@
 Users API Functionalities
-* Sign up - first name, last name, email, matric number, class(abi na year una dey call am? e.g ND 1), department/faculty 
+* Sign up - first name, last name, email, matric number, class(abi na year una dey call am? e.g ND 1), department/faculty  (DONE)
 
-* Login - matric number or email, password
+* Login - matric number or email, password (DONE)
 
-* Profile/me - to return users profile data
+* Profile/me - to return users profile data (DONE)
 
 * My courses - to return the list of apis that  belongs to a user
 
- * All courses - to return the list of all courses. Should support filters - >By class. e.g I should be able to get all courses for ND 1 only
+* All courses - to return the list of all courses. Should support filters - >By class. e.g I should be able to get all courses for ND 1 only
 > By faculty e.g department of social science e.t.c
 > I should be able to pass in 2 or more filters at the same time e.g class=nd1&faculty=science. Something like this 
 
