@@ -38,12 +38,19 @@ class Primary(AbstractUser):
         ("POLYMER & TEXTILE", "POLYMER & TEXTILE")
         
     )
+    
+    GENDER = (
+        ("MALE", "MALE"),
+        ("FEMALE", "FEMALE")
+    )
+    
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
     matric_number = models.CharField(max_length=40)
     year = models.CharField(max_length=4)
     department = models.CharField(choices=DEPARTMENTS, max_length=50)
+    gender = models.CharField(choices=GENDER, max_length=6)
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS=["password"]

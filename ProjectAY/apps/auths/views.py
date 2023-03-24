@@ -3,6 +3,11 @@ from helpers.views import BaseView
 from .models import Primary
 from rest_framework.response import Response
 from .helpers import jsonify_userdata
+from rest_framework.decorators import APIView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.
 class CreateStudentUser(BaseView):
@@ -20,24 +25,63 @@ class CreateStudentUser(BaseView):
                 "message": "We regret to inform you that an account with the email address provided already exists in our system. Please try logging in with your email and password."
             }
             return Response(resp, 400)
-        user.first_name = request.data["first_name"]
-        user.last_name = request.data["last_name"]
-        user.email = request.data["email"]
-        user.matric_number = request.data["matric_number"]
-        user.department = request.data["department"]
-        user.year = request.data["year"]
-        user.set_password(raw_password= request.data["password"])
-        user.save()
+        student = Primary(first_name=request.data["first_name"])
+        student.last_name = request.data["last_name"]
+        student.email = request.data["email"]
+        student.matric_number = request.data["matric_number"]
+        student.department = request.data["department"]
+        student.year = request.data["year"]
+        student.set_password(raw_password= request.data["password"])
+        student.save()
         resp = {
             "code":201,
             "message":"Student Registered Successfully",
-            "student-user": jsonify_userdata(user) 
+            "student-user": jsonify_userdata(student) 
         }
         return Response(resp, 201)
     
+    
+class Login(BaseView):
+    required_post_fields = ["matric_number", "password"]
+    def post(self, request, format=None):
+        res = super().post(request, format)
+        if res:
+            return res
+        user = Primary.objects.filter(matric_number=request.data["matric_number"]).first()
+        if not user:
+            res = {
+                "code":400,
+                "message":"invalid credentials"
+            }
+            return Response(res, 400)
+        if user.check_password(raw_password=request.data["password"]):
+            token = RefreshToken.for_user(user)
+            print(token)
+            res = {
+                "code":200,
+                "message":"success",
+                "student": jsonify_userdata(user),
+                "token":str(token.access_token),
+            }
+            return Response(res, 200)
+        else:
+            res = {
+                "code":400,
+                "message":"invalid credentials"
+            }
+            return Response(res, 400)
         
-        
-        
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         
         
         
