@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     "lecturers",
     "students",
     
+    # REST API
+    "rest_framework",
+    
     # CLOUD
     'cloudinary_storage',
 ]
@@ -145,5 +148,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE={
+    # "CLOUDINARY_CLOUD_NAME":env("CLOUDINARY_CLOUD_NAME"), 
+    # "CLOUDINARY_API_KEY":env("CLOUDINARY_API_KEY"), 
+    # "CLOUDINARY_API_SECRET":env("CLOUDINARY_API_SECRET"),
     "CLOUDINARY_URL":env("CLOUDINARY_URL")
 }

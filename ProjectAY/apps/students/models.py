@@ -12,8 +12,9 @@ class Course(models.Model):
     
 class Topic(models.Model):
     name = models.CharField(max_length=200)
-    note_file = models.FileField(storage=RawMediaCloudinaryStorage())
-    notes = models.TextField()
+    note_file = models.FileField(storage=RawMediaCloudinaryStorage(), null=True)
+    notes = models.TextField(null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
     
     def get_file_url(self):
         return self.note_file.storage.url(self.note_file.name)
