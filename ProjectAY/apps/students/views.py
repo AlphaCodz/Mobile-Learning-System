@@ -8,6 +8,7 @@ from auths.helpers import jsonify_userdata
 from .models import Course, Topic
 from.helpers import jsonify_courses
 from rest_framework import status
+from django.db.models import Q
 
 # Create your views here.
 
@@ -90,3 +91,29 @@ class AddTopic(APIView):
             }
         }
         return Response(resp, 201)
+    
+
+class SearchView(APIView):
+    def get(self, request):
+        query = request.query_params.get('q')
+        if not query:
+            return Response({"error": "No search query provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        courses = Course.objects.filter(
+            Q(title__icontains=query) | 
+            Q(code__icontains=query) |
+            Q(topics__name__icontains=query)
+        ).distinct()
+
+        results = [{
+            "title": course.title,
+            "code": course.code,
+            "description": course.description,
+            "topics": [{
+                "name": topic.name,
+                "notes": topic.notes,
+                "note_file_url": topic.get_file_url()
+            } for topic in course.topics.all()]
+        } for course in courses]
+
+        return Response({"results": results}, status=status.HTTP_200_OK)
