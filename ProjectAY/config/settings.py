@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 import environ
+import cloudinary
 
 
 
@@ -51,7 +52,10 @@ INSTALLED_APPS = [
     # APPS
     "auths",
     "lecturers",
-    "students"
+    "students",
+    
+    # CLOUD
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +141,9 @@ AUTH_USER_MODEL = "auths.Primary"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE={
+    "CLOUDINARY_URL":env("CLOUDINARY_URL")
+}
