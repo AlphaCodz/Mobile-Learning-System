@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from students.models import Course
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -51,6 +52,7 @@ class Primary(AbstractUser):
     year = models.CharField(max_length=4)
     department = models.CharField(choices=DEPARTMENTS, max_length=50)
     gender = models.CharField(choices=GENDER, max_length=6)
+    course = models.ManyToManyField(Course)
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS=["password"]

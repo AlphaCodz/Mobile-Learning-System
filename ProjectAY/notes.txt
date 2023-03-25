@@ -5,7 +5,7 @@ Users API Functionalities
 
 * Profile/me - to return users profile data (DONE)
 
-* My courses - to return the list of apis that  belongs to a user
+* My courses - to return the list of courses that belongs to a user
 
 * All courses - to return the list of all courses. Should support filters - >By class. e.g I should be able to get all courses for ND 1 only
 > By faculty e.g department of social science e.t.c

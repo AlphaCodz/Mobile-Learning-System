@@ -5,6 +5,7 @@ from .permissions import IsStudent
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from auths.helpers import jsonify_userdata
+from .models import Course
 
 # Create your views here.
 
@@ -24,5 +25,18 @@ class UserProfile(APIView):
             "student": jsonify_userdata(student)
         }     
         return Response(resp, 200)
-            
+
+class AddCourse(BaseView):
+    required_post_fields = ["title", "code", "description"]
+    def post(self, request, format=None):
+        super().post(request, format)
         
+        course = Course(title=request.data["title"])
+        course.code = request.data["code"]
+        course.description = request.data["description"]
+        course.save()
+        resp = {
+            "code":201,
+            "message": "Course Added Successfully"
+        }
+        return Response(resp, 201)
