@@ -9,11 +9,11 @@ Users API Functionalities
 
 * All courses - to return the list of all courses. Should support filters - >By class. e.g I should be able to get all courses for ND 1 only
 > By faculty e.g department of social science e.t.c
-> I should be able to pass in 2 or more filters at the same time e.g class=nd1&faculty=science. Something like this
+> I should be able to pass in 2 or more filters at the same time e.g class=nd1&faculty=science. Something like this (DONE)
 
-* Join a course
+* Join a course 
 
-* Get course - to return all lessons created under a course
+* Get course - to return all lessons created under a course (DONE)
 
 * Mark lesson as taken - to inform the lecturer that 1 more person just finished this lesson. Should be a number that you just increment. This will be under lesson stats on the lecturer's end
 
