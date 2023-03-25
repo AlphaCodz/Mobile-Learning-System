@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from auths.helpers import jsonify_userdata
 from .models import Course
+from.helpers import jsonify_courses
 
 # Create your views here.
 
@@ -37,6 +38,20 @@ class AddCourse(BaseView):
         course.save()
         resp = {
             "code":201,
-            "message": "Course Added Successfully"
+            "message": "Course Added Successfully",
+            "data": jsonify_courses(course) 
         }
         return Response(resp, 201)
+
+class AllCourses(APIView):
+    def get(self, request):
+        course = Course.objects.all()
+        lis = []
+        for courses in course:
+            data = {
+                "courses": jsonify_courses(courses)
+            }
+            lis.append(data)
+            context = {"courses":lis}
+        return Response(context, 200)
+            

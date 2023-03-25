@@ -10,4 +10,4 @@ def jsonify_userdata(user:Primary):
         "year": user.year,
         "department": user.department
     }
-    
+
