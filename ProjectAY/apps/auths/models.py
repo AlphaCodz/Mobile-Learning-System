@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from students.models import Course
+import random as rand
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -52,7 +53,9 @@ class Primary(AbstractUser):
     year = models.CharField(max_length=4)
     department = models.CharField(choices=DEPARTMENTS, max_length=50)
     gender = models.CharField(choices=GENDER, max_length=6)
+    staff_id = models.CharField(max_length=50, null=True)
     course = models.ManyToManyField(Course)
+    is_lecturer = models.BooleanField(default=False)
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS=["password"]
@@ -61,3 +64,8 @@ class Primary(AbstractUser):
     
     def __str__(self):
         return f"{self.first_name} {self.department}"
+    
+    def save(self, *args, **kwargs):
+        usercode = rand.randint(10000, 99999)
+        self.username = usercode
+        super().save(*args, **kwargs)

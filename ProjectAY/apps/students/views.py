@@ -117,3 +117,4 @@ class SearchView(APIView):
         } for course in courses]
 
         return Response({"results": results}, status=status.HTTP_200_OK)
+    
