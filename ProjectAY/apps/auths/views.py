@@ -72,6 +72,36 @@ class Login(BaseView):
             }
             return Response(res, 400)
         
+class LoginStaff(BaseView):
+    required_post_fields = ["staff_id", "password"]
+    def post(self, request, format=None):
+        res = super().post(request, format)
+        if res:
+            return res
+        staff = Primary.objects.filter(staff_id=request.data["staff_id"]).first()
+        if not staff:
+            res = {
+                "code":400,
+                "message":"invalid credentials"
+            }
+            return Response(res, 400)
+        if staff.check_password(raw_password=request.data["password"]):
+            token = RefreshToken.for_user(staff)
+            print(token)
+            res = {
+                "code":200,
+                "message":"success",
+                "student": Jsonify_staff(staff),
+                "token":str(token.access_token),
+            }
+            return Response(res, 200)
+        else:
+            res = {
+                "code":400,
+                "message":"invalid credentials"
+            }
+            return Response(res, 400)
+        
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request):
@@ -106,6 +136,7 @@ class RegLecturer(BaseView):
             department=request.data["department"],
         )
         staff.set_password(raw_password=request.data["password"])
+        staff.is_lecturer=True
         staff.save()
         res = {
             "code":201,

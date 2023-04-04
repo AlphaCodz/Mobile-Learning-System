@@ -15,6 +15,7 @@ import os
 import sys
 import environ
 import cloudinary
+from datetime import timedelta
 
 
 
@@ -122,6 +123,19 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
+
+SIMPLE_JWT = {
+    'UPDATE_LAST_LOGIN': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=100000),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=100000),
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
 
 
 # Internationalization
