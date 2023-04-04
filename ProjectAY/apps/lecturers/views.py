@@ -28,7 +28,7 @@ class Profile(APIView):
         except Exception as e:
             return {
                 "code":400,
-                "message": "User Not Logged in",
+                "message": "User Not Found",
                 "error": str(e)
             }
             

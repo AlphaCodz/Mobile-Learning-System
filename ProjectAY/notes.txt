@@ -20,11 +20,11 @@ Users API Functionalities
 
 Lecturer API Functionalities
 
-* Sign up - first name, last name, email, staff id, department/faculty 
+* Sign up - first name, last name, email, staff id, department/faculty [DONE]
 
-* Login - staff id or email, password
+* Login - staff id or email, password [DONE]
 
-* Profile/me - to return lecturer's profile data
+* Profile/me - to return lecturer's profile data [DONE]
 
 * My courses - to see the list of courses created by a lecturer 
 
