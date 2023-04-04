@@ -26,9 +26,9 @@ Lecturer API Functionalities
 
 * Profile/me - to return lecturer's profile data [DONE]
 
-* My courses - to see the list of courses created by a lecturer 
-
 * Create course - course name, description, class that will take the course e.g ND 1
+
+* My courses - to see the list of courses created by a lecturer 
 
 * Create lesson - title/topic, content/lesson body, footnote.
 

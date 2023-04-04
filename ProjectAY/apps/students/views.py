@@ -29,22 +29,6 @@ class UserProfile(APIView):
         }     
         return Response(resp, 200)
 
-class AddCourse(BaseView):
-    required_post_fields = ["title", "code", "description"]
-    def post(self, request, format=None):
-        super().post(request, format)
-        
-        course = Course(title=request.data["title"])
-        course.code = request.data["code"]
-        course.description = request.data["description"]
-        course.save()
-        resp = {
-            "code":201,
-            "message": "Course Added Successfully",
-            "data": jsonify_courses(course) 
-        }
-        return Response(resp, 201)
-
 class AllCourses(APIView):
     def get(self, request):
         course = Course.objects.all()
@@ -56,41 +40,6 @@ class AllCourses(APIView):
             lis.append(data)
             context = {"courses":lis}
         return Response(context, 200)
-
-class AddTopic(APIView):
-    def post(self, request, id):
-        try:
-            course = Course.objects.get(id=id)
-        except Course.DoesNotExist:
-            return Response({"error": "Course does not exist"}, status=status.HTTP_404_NOT_FOUND)
-
-        topics_data = request.data.get("topics")
-        if not isinstance(topics_data, list):
-            return Response({"error": "Invalid topics data format. Expected a list of topics."}, status=status.HTTP_400_BAD_REQUEST)
-
-        topics = []
-        for topic_data in topics_data:
-            name = topic_data.get("name")
-            notes = topic_data.get("notes")
-            note_file = topic_data.get("note_file")
-            topic = Topic.objects.create(name=name, notes=notes, note_file=note_file, course=course)
-            topics.append({
-                "name": topic.name,
-                "notes": topic.notes,
-                "note_file_url": topic.get_file_url()
-            })
-
-        resp = {
-            "code": 201,
-            "message": "Topics created successfully",
-            "course": {
-                "title": course.title,
-                "code": course.code,
-                "description": course.description,
-                "topics": topics
-            }
-        }
-        return Response(resp, 201)
     
 
 class SearchView(APIView):
