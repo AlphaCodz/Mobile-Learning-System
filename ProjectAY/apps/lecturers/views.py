@@ -6,7 +6,8 @@ from .helpers import Jsonify_staff
 from rest_framework.decorators import APIView
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from .permissions import IsStaff
-from students.models import Topic
+from students.models import Topic, Course
+from students.helpers import jsonify_courses
 
 # Create your views here.
 class Profile(APIView):
@@ -75,8 +76,8 @@ class AddCourse(BaseView):
     required_post_fields = ["title", "code", "description"]
     def post(self, request, format=None):
         super().post(request, format)
-        
-        course = Course(title=request.data["title"])
+        course = Course()
+        course.title = request.data["title"]
         course.code = request.data["code"]
         course.description = request.data["description"]
         course.save()
@@ -87,7 +88,52 @@ class AddCourse(BaseView):
         }
         return Response(resp, 201)
     
-    
+class AddTopictoCourse(APIView):
+    permission_classes = [IsStaff, ]
+    def post(self, request, format=None):
+        try:
+            course_id = request.data.get("course_id")
+            topic_ids = request.data.get("topic_ids")
+            
+            # Check if course exists
+            course = Course.objects.filter(id=course_id).first()
+            if not course:
+                res = {
+                    "code": 400,
+                    "message": "Course not found",
+                }
+                return Response(res, 400)
+            
+            # Check if topics exist
+            topics = Topic.objects.filter(id__in=topic_ids)
+            if not topics:
+                res = {
+                    "code": 400,
+                    "message": "Topics not found",
+                }
+                return Response(res, 400)
+            
+            # Add topics to course
+            for topic in topics:
+                course.topic.add(topic)
+            res = {
+                "code": 200,
+                "message": "Topics added to course successfully",
+            }
+            return Response(res, 200)
+        
+        except Exception as e:
+            res = {
+                "code": 400,
+                "message": "Unsuccessful Please Try again",
+                "error": str(e)
+            }
+            return Response(res, 400)
+            
+            
+        
+
+
     
     
 """

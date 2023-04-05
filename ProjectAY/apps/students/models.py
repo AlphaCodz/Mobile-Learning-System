@@ -25,5 +25,10 @@ class Course(models.Model):
         return self.title
     
 
+class CourseTopic(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return self.course.title
     
