@@ -118,6 +118,26 @@ class CreateLesson(APIView):
         }
         return Response(resp, 201)
 
+class GetLessons(APIView):
+    def get(self, request, course_id):
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            resp = {
+                "code": 404,
+                "message": "Course Not Found"
+            }
+            return Response(resp, 404)
+        lessons = course.lessons.all()
+        data = [{"name":lesson.name, "files": lesson.get_file_url(), "notes":lesson.notes} for lesson in lessons]
+        resp = {
+            "code": 200,
+            "message": "Successful",
+            "data": data
+        }
+        return Response(resp, 200)
+        
+    
 class CreateTopic(BaseView):
     def post(self, request, course_id):
         course_id = Course.objects.get(id=course_id)

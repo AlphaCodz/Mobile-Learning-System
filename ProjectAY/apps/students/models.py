@@ -14,7 +14,7 @@ class Topic(models.Model):
     name = models.CharField(max_length=200)
     files = models.FileField(storage=RawMediaCloudinaryStorage(), null=True)
     notes = models.TextField(null=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons", null=True)
     
     def get_file_url(self):
         if self.files:
