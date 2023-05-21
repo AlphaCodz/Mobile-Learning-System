@@ -3,8 +3,8 @@ from .models import Course
 def jsonify_courses(course:Course):
     return {
         "id": course.id,
-        "course title": course.title,
-        "course code": course.code,
-        "course description": course.description
+        "course_title": course.title,
+        "course_code": course.code,
+        "course_description": course.description
     }
     

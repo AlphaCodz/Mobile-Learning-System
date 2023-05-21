@@ -87,50 +87,42 @@ class AddCourse(BaseView):
             "data": jsonify_courses(course) 
         }
         return Response(resp, 201)
-    
-class AddTopictoCourse(APIView):
-    permission_classes = [IsStaff, ]
-    def post(self, request, format=None):
+
+class CreateLesson(APIView):
+    def post(self, request, course_id):
         try:
-            course_id = request.data.get("course_id")
-            topic_ids = request.data.get("topic_ids")
-            
-            # Check if course exists
-            course = Course.objects.filter(id=course_id).first()
-            if not course:
-                res = {
-                    "code": 400,
-                    "message": "Course not found",
-                }
-                return Response(res, 400)
-            
-            # Check if topics exist
-            topics = Topic.objects.filter(id__in=topic_ids)
-            if not topics:
-                res = {
-                    "code": 400,
-                    "message": "Topics not found",
-                }
-                return Response(res, 400)
-            
-            # Add topics to course
-            for topic in topics:
-                course.topic.add(topic)
-            res = {
-                "code": 200,
-                "message": "Topics added to course successfully",
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            resp = {
+                "code": 404,
+                "message": "Course Not Found"
             }
-            return Response(res, 200)
+            return Response(resp, 404)
         
-        except Exception as e:
-            res = {
-                "code": 400,
-                "message": "Unsuccessful Please Try again",
-                "error": str(e)
+        lesson = Topic.objects.create(
+            name=request.data["name"],
+            files = request.data["files"],
+            notes= request.data["notes"],
+            course=course
+        )
+        lesson.save()
+        resp = {
+            "code": 201,
+            "message": "Lesson Created Successfully",
+            "lesson_data": {
+                "name": lesson.name,
+                "files": lesson.get_file_url(),
+                "notes": lesson.notes,
+                "course": lesson.course.title
             }
-            return Response(res, 400)
-            
-            
+        }
+        return Response(resp, 201)
+
+class CreateTopic(BaseView):
+    def post(self, request, course_id):
+        course_id = Course.objects.get(id=course_id)
+        
+        
         
 
 
