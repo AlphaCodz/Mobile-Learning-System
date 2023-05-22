@@ -136,6 +136,33 @@ class GetLessons(APIView):
             "data": data
         }
         return Response(resp, 200)
+    
+class UpdateLesson(APIView):
+    def put(self, request, lesson_id):
+        try:
+            lesson = Topic.objects.get(id=lesson_id)
+        except Topic.DoesNotExist:
+            resp = {
+                "code": 404,
+                "message": "Lesson Not Found"
+            }
+            return Response(resp, 404)
+        lesson.name = request.data.get("name", lesson.name)
+        lesson.files = request.data.get("files", lesson.files)
+        lesson.notes = request.data.get("notes", lesson.notes)
+        lesson.save()
+        resp = {
+            "code": 200,
+            "message": "Lesson Updated Successfully",
+            "lesson_data": {
+                "name": lesson.name,
+                "files": lesson.get_file_url(),
+                "notes": lesson.notes,
+                # "course": lesson.course.title
+            }
+        }
+        return Response(resp, 200)
+        
         
     
 class CreateTopic(BaseView):
