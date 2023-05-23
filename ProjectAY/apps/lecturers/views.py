@@ -6,7 +6,7 @@ from .helpers import Jsonify_staff
 from rest_framework.decorators import APIView
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from .permissions import IsStaff
-from students.models import Topic, Course
+from students.models import Lesson, Course
 from students.helpers import jsonify_courses
 
 # Create your views here.
@@ -31,46 +31,7 @@ class Profile(APIView):
                 "code":400,
                 "message": "User Not Found",
                 "error": str(e)
-            }
-            
-class CreateTopic(BaseView):
-    required_post_fields=["name", "files", "notes"]
-    def post(self, request, format=None):
-        try:
-            topic = Topic.objects.filter(name=request.data["name"]).exists()
-            if topic:
-                res = {
-                    "code":400,
-                    "message": "Topic already Exists"
-                }
-                return Response(res, 400)
-            # call fields
-            
-            # create fields
-            topic = Topic()
-            topic.name = request.data["name"]
-            topic.files = request.data["files"]
-            topic.notes = request.data["notes"]
-            topic.save()
-            res = {
-                "code": 201,
-                "message": "Topic created successfully",
-                "topic_data": {
-                    "name": topic.name,
-                    "file": topic.get_file_url() if topic.get_file_url() else None,
-                    "note": topic.notes
-                }
-            }
-            return Response(res, 201)
-        except Exception as e:
-            res = {
-                "code": 400,
-                "message": "Unsuccessful Please Try again",
-                "error": str(e)
-            }
-            return Response(res, 400)
-        
-    
+            }  
 
 class AddCourse(BaseView):
     required_post_fields = ["title", "code", "description"]
@@ -99,8 +60,8 @@ class CreateLesson(APIView):
             }
             return Response(resp, 404)
         
-        lesson = Topic.objects.create(
-            name=request.data["name"],
+        lesson = Lesson.objects.create(
+            title=request.data["title"],
             files = request.data["files"],
             notes= request.data["notes"],
             course=course
@@ -110,7 +71,7 @@ class CreateLesson(APIView):
             "code": 201,
             "message": "Lesson Created Successfully",
             "lesson_data": {
-                "name": lesson.name,
+                "title": lesson.title,
                 "files": lesson.get_file_url(),
                 "notes": lesson.notes,
                 "course": lesson.course.title
@@ -129,7 +90,7 @@ class GetLessons(APIView):
             }
             return Response(resp, 404)
         lessons = course.lessons.all()
-        data = [{"name":lesson.name, "files": lesson.get_file_url(), "notes":lesson.notes} for lesson in lessons]
+        data = [{"title":lesson.title, "files": lesson.get_file_url(), "notes":lesson.notes} for lesson in lessons]
         resp = {
             "code": 200,
             "message": "Successful",
@@ -140,14 +101,14 @@ class GetLessons(APIView):
 class UpdateLesson(APIView):
     def put(self, request, lesson_id):
         try:
-            lesson = Topic.objects.get(id=lesson_id)
-        except Topic.DoesNotExist:
+            lesson = Lesson.objects.get(id=lesson_id)
+        except Lesson.DoesNotExist:
             resp = {
                 "code": 404,
                 "message": "Lesson Not Found"
             }
             return Response(resp, 404)
-        lesson.name = request.data.get("name", lesson.name)
+        lesson.title = request.data.get("title", lesson.title)
         lesson.files = request.data.get("files", lesson.files)
         lesson.notes = request.data.get("notes", lesson.notes)
         lesson.save()
@@ -155,7 +116,7 @@ class UpdateLesson(APIView):
             "code": 200,
             "message": "Lesson Updated Successfully",
             "lesson_data": {
-                "name": lesson.name,
+                "title": lesson.title,
                 "files": lesson.get_file_url(),
                 "notes": lesson.notes,
                 # "course": lesson.course.title
@@ -163,23 +124,9 @@ class UpdateLesson(APIView):
         }
         return Response(resp, 200)
         
-        
-    
-class CreateTopic(BaseView):
-    def post(self, request, course_id):
-        course_id = Course.objects.get(id=course_id)
-        
-        
-        
-
-
-    
-    
 """
 ALGORITHM
 1. CREATE COURSE
 2. CREATE TOPIC
 3. ADD TOPIC TO COURSE BY ID
-
 """
-    
