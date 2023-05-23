@@ -90,7 +90,7 @@ class GetLessons(APIView):
             }
             return Response(resp, 404)
         lessons = course.lessons.all()
-        data = [{"title":lesson.title, "files": lesson.get_file_url(), "notes":lesson.notes} for lesson in lessons]
+        data = [{"id":lesson.id,"title":lesson.title, "files": lesson.get_file_url(), "notes":lesson.notes} for lesson in lessons]
         resp = {
             "code": 200,
             "message": "Successful",
