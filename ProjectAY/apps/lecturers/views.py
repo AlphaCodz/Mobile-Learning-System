@@ -62,7 +62,7 @@ class CreateLesson(APIView):
         
         lesson = Lesson.objects.create(
             title=request.data["title"],
-            files = request.data["files"],
+            files = request.data["files"] if "files" in request.data else None,
             notes= request.data["notes"],
             course=course
         )
